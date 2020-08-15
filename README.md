@@ -3,7 +3,7 @@ A cool little weather forecast page that uses https://openweathermap.org/ api to
 
 ## Image of site
 
-![image of the working site](/assets/Weather_Dashboard.jpg)
+![image of the working site](/assets/screenshot.jpg)
 
 ## Deployed link
 
