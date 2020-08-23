@@ -33,7 +33,7 @@ function showWeather(city) {
         .then(function (res) {
             $("#currentWeather").empty()
             console.log(res)
-            var jumbotron = $("<div>").addClass("jumbotron ")
+            var jumbotron = $("<div>").addClass("jumbotron bg-primary text-white")
             var cityName = $("<h2>").text(res.name + " (" + moment.unix(res.dt).format('L') + ')')
             var img = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + res.weather[0].icon + ".png")
             cityName.append(img)
