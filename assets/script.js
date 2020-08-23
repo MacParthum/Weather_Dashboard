@@ -1,6 +1,33 @@
 var apiKey = "c7f874b0c6f8219e0ea1d8074ac09d1e"
 var prevSearch = JSON.parse(localStorage.getItem("weather")) || []
 console.log(prevSearch)
+const fiveDayWeather = city => {
+    $.get("https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + apiKey)
+        .then(data => {
+            console.log(data)
+            // loop over all forecasts (by 3-hour increments)
+            for (var i = 0; i < data.list.length; i++) {
+                // only look at forecasts around 3:00pm
+                if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
+                    // create html elements for a bootstrap card
+                    var col = $("<div>").addClass("col-md-2");
+                    var card = $("<div>").addClass("card bg-primary text-white");
+                    var body = $("<div>").addClass("card-body p-2");
+
+                    var title = $("<h5>").addClass("card-title").text(new Date(data.list[i].dt_txt).toLocaleDateString());
+
+                    var img = $("<img>").attr("src", "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
+
+                    var p1 = $("<p>").addClass("card-text").text("Temp: " + data.list[i].main.temp_max + " °F");
+                    var p2 = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
+
+                    // merge together and put on page
+                    col.append(card.append(body.append(title, img, p1, p2)));
+                    $("#futureWeather").append(col);
+                }
+            }
+        })
+}
 function showWeather(city) {
     $.get("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + apiKey)
         .then(function (res) {
@@ -20,14 +47,8 @@ function showWeather(city) {
                     $("#currentWeather").append(jumbotron)
                 })
         })
-    // for (let i = 0; i < 5; i++) {
-    //     var card = $("<div>").addClass("card bg-primary col-md-2 text-light")
-    //     var date = $("<div>").text("8/13/2020")
-    //     var temp = $("<div>").text("Temp: 86.27 F")
-    //     var humidity = $("<div>").text("Humidity: 68%")
-    //     card.append(date, temp, humidity)
-    //     $("#futureWeather").append(card)
-    // }
+
+    fiveDayWeather(city)
 }
 function renderList() {
     $("#citySearch").empty()
@@ -54,3 +75,5 @@ function init() {
 }
 init()
 renderList()
+
+
